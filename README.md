@@ -4,9 +4,6 @@
 
 This project simulates a simplified content-based music recommender. It represents each song using genre, mood, and energy attributes, compares them against a user's stated taste profile, and produces a ranked list of the top-k best-matching songs along with plain-language reasons for each recommendation.
 
-I tested a weight-shift experiment where I halved the genre match weight (2.0 → 1.0) and doubled the maximum energy closeness score (1.0 → 2.0). The top recommendation for each of my three test profiles stayed the same, but the middle of the rankings shifted — for example, in the High-Energy Pop profile, a song matching only mood (Rooftop Lights) jumped ahead of a song matching only genre (Gym Hero) once energy and mood were weighted more heavily relative to genre. This showed that the ranking is sensitive to weight choices even when the top pick is stable. Full details and side-by-side output are in `model_card.md` under Evaluation.
-
-This project showed me that recommenders don't need to be complicated to feel personalized — a handful of weighted comparisons between song attributes and a user profile was enough to produce results that matched my own musical intuition. It also made clear where bias can creep in: because the dataset isn't evenly distributed across genres, and because genre carries the most weight in scoring, users with less common tastes get less varied, more repetitive recommendations. That's a small-scale version of the same filter-bubble problem real platforms deal with at a much larger scale.
 ---
 
 ## How The System Works
@@ -25,21 +22,22 @@ The `UserProfile` stores a target `genre`, target `mood`, and target `energy` va
 
 1. Create a virtual environment (optional but recommended):
 
-   ```bash
+```bash
    python -m venv .venv
    source .venv/bin/activate      # Mac or Linux
    .venv\Scripts\activate         # Windows
+```
 
 2. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+   pip install -r requirements.txt
 ```
 
 3. Run the app:
 
 ```bash
-python -m src.main
+   python -m src.main
 ```
 
 ### Running Tests
@@ -55,7 +53,6 @@ You can add more tests in `tests/test_recommender.py`.
 ---
 
 ## Sample Recommendation Output
-
 Top recommendations:
 Sunrise City - Score: 3.98
 Because: genre match (+2.0), mood match (+1.0), energy closeness (+0.98)
@@ -67,7 +64,6 @@ Night Drive Loop - Score: 0.95
 Because: energy closeness (+0.95)
 Storm Runner - Score: 0.89
 Because: energy closeness (+0.89)
-```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
 
@@ -75,25 +71,13 @@ Because: energy closeness (+0.89)
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
-
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+I tested a weight-shift experiment where I halved the genre match weight (2.0 → 1.0) and doubled the maximum energy closeness score (1.0 → 2.0). The top recommendation for each of my three test profiles stayed the same, but the middle of the rankings shifted — for example, in the High-Energy Pop profile, a song matching only mood (Rooftop Lights) jumped ahead of a song matching only genre (Gym Hero) once energy and mood were weighted more heavily relative to genre. This showed that the ranking is sensitive to weight choices even when the top pick is stable. Full details and side-by-side output are in `model_card.md` under Evaluation.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+The catalog only has 10 songs, so genres like jazz and ambient have just one representative each, meaning users with those preferences always see the same narrow set of results. The system also does not factor in tempo, valence, danceability, or acousticness when scoring, even though they exist in the dataset, so two songs could score identically despite sounding quite different. Because genre is weighted the most heavily, the system can also overfit to a user's stated genre even when a different-genre song might actually be a closer match on mood and energy. See `model_card.md` for a deeper breakdown of bias and limitations.
 
 ---
 
@@ -103,10 +87,4 @@ Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-
-
-
+This project showed me that recommenders don't need to be complicated to feel personalized — a handful of weighted comparisons between song attributes and a user profile was enough to produce results that matched my own musical intuition. It also made clear where bias can creep in: because the dataset isn't evenly distributed across genres, and because genre carries the most weight in scoring, users with less common tastes get less varied, more repetitive recommendations. That's a small-scale version of the same filter-bubble problem real platforms deal with at a much larger scale.
