@@ -2,17 +2,11 @@
 
 ## Project Summary
 
-In this project you will build and explain a small music recommender system.
+This project simulates a simplified content-based music recommender. It represents each song using genre, mood, and energy attributes, compares them against a user's stated taste profile, and produces a ranked list of the top-k best-matching songs along with plain-language reasons for each recommendation.
 
-Your goal is to:
+I tested a weight-shift experiment where I halved the genre match weight (2.0 → 1.0) and doubled the maximum energy closeness score (1.0 → 2.0). The top recommendation for each of my three test profiles stayed the same, but the middle of the rankings shifted — for example, in the High-Energy Pop profile, a song matching only mood (Rooftop Lights) jumped ahead of a song matching only genre (Gym Hero) once energy and mood were weighted more heavily relative to genre. This showed that the ranking is sensitive to weight choices even when the top pick is stable. Full details and side-by-side output are in `model_card.md` under Evaluation.
 
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
-
+This project showed me that recommenders don't need to be complicated to feel personalized — a handful of weighted comparisons between song attributes and a user profile was enough to produce results that matched my own musical intuition. It also made clear where bias can creep in: because the dataset isn't evenly distributed across genres, and because genre carries the most weight in scoring, users with less common tastes get less varied, more repetitive recommendations. That's a small-scale version of the same filter-bubble problem real platforms deal with at a much larger scale.
 ---
 
 ## How The System Works
