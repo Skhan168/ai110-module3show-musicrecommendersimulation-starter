@@ -2,60 +2,31 @@
 
 ## 1. Model Name  
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+VibeMatch 1.0 
 
 ---
 
 ## 2. Intended Use  
 
-Describe what your recommender is designed to do and who it is for. 
-
-Prompts:  
-
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+This recommender is designed for classroom exploration of how content-based music recommendation works. It takes a simple user taste profile (favorite genre, favorite mood, target energy) and suggests songs from a small fixed catalog that match those preferences. It assumes the user's taste can be reasonably described using just genre, mood, and energy, and it is not meant for real-world deployment with real users or a large-scale music catalog.
 
 ---
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
-
-Prompts:  
-
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
-
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+Each song has attributes like genre, mood, and energy. A user profile states a favorite genre, favorite mood, and target energy level. The system compares each song to the user's profile: it awards 2 points if the genre matches exactly, 1 point if the mood matches exactly, and up to 1 point based on how close the song's energy is to the user's target energy (the closer the match, the more points). Every song in the catalog is scored this way, then the songs are sorted from highest to lowest score, and the top few are shown to the user along with the specific reasons for each score.
 
 ---
 
 ## 4. Data  
 
-Describe the dataset the model uses.  
-
-Prompts:  
-
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+The catalog contains 10 songs with the following attributes: title, artist, genre, mood, energy, tempo_bpm, valence, danceability, and acousticness. Genres represented include pop, lofi, rock, ambient, jazz, synthwave, and indie pop. Moods represented include happy, chill, intense, relaxed, moody, and focused. No songs were added or removed from the starter dataset. Musical taste factors that are missing include lyrical content, vocal style, instrumentation, and cultural or regional genre distinctions, none of which the current features capture.
 
 ---
 
 ## 5. Strengths  
 
-Where does your system seem to work well  
-
-Prompts:  
-
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+The system gives clear, sensible results for users whose stated genre and mood are well represented in the catalog, such as a High-Energy Pop or Chill Lofi profile, where multiple close matches exist. The scoring correctly rewards exact genre and mood matches while still giving partial credit to songs that are close in energy even without a full match, which matched my own intuition about how "vibe" works. The explanation output (the list of reasons) makes it easy to see exactly why a song was recommended, which is more transparent than a black-box score alone.
 
 ---
 
@@ -124,23 +95,10 @@ No numeric error metrics were used — evaluation here is qualitative, based on 
 
 ## 8. Future Work  
 
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+If I continued developing this, I would add tempo and valence as secondary scoring features with smaller weights, since they carry some signal but shouldn't outweigh genre, mood, and energy. I would also expand the catalog so that underrepresented genres like jazz and ambient have more songs to compete for a top spot, reducing the small-scale filter bubble effect. Finally, I would add a diversity mechanism to the ranking step so the top 5 doesn't always cluster around the same genre when a user's taste is narrow.
 
 ---
 
 ## 9. Personal Reflection  
 
-A few sentences about your experience.  
-
-Prompts:  
-
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+My biggest learning moment was seeing how a small change in weighting (doubling energy, halving genre) shifted the middle of the rankings without changing the top pick, which showed me how sensitive recommendation systems can be to arbitrary weight choices. AI tools helped me quickly generate working code for loading CSV data and scoring songs, but I had to double check the exact key names being used (like "genre" vs "favorite_genre") since mismatches there caused real bugs. What surprised me most was how "smart" the recommendations felt even though the underlying logic is just simple arithmetic on a few numeric and string comparisons — it made me think that a lot of the "personalization" feeling in real apps like Spotify might come from similarly simple rules applied at a much larger scale.
